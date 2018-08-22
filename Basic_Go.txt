@@ -1,0 +1,418 @@
+
+NOTE: This page believes that readers will have basic knowledge of programing.
+
+Go is an open source programming language that makes it easy to build simple, reliable, and efficient software. 
+
+Content:
+1) Data Types : Number, String, Boolean
+2) Variable :  variables declaration, Shorthand declaration , Constant declaration, Multiple Variables
+3) Control Structures : for statement , if /else if statement , switch statement
+4) Built in data-type :  Array , slice , Map
+
+
+============================================================
+			Data Types
+============================================================
+
+NUMBERS:
+*******
+
+Integer :
+  a) unsigned integer : represented as "uint"
+	1) uint8
+	2) unit16
+	3) unit32
+	4) unit64
+ 
+  b) signed integer : represented as "int"
+	1) int8
+	2) int16
+	3) int32
+	4) int64
+
+
+Floating point number :
+ 1) float32 
+ 2) floeat64
+
+Complex number :
+ 1) complex64
+ 2) complex128
+
+STRING
+******
+
+Strings are sequence of characters with a definite length used to represent text.  
+
+example :
+	"Go Programmer"
+	"hello \n developer"  here the "\n" inside the double quotes is take as new line.   
+
+Boolean 
+*******
+
+Boolean are 1-BIT integers , used for logical operations .
+
+  && - and 
+  || - or
+  !  - not
+
+============================================================
+			VARIABLE
+============================================================
+
+
+A variable is a storage location with a specific name assigned to it
+
+Eg: var name string = "Golang"
+
+"var"    is the keyword
+"name"   is the variable name 
+"string" is the type
+
+declaring shorthand Variable
+****************************
+
+Shorthand is used to declare variables without any type specified .
+":=" should be used to  declare a variable 
+
+  eg : name := "Programmer"
+       number := 99
+
+Note: Shorthand variable declarations can only be used inside a function/method
+
+Scope concept :
+**************
+
+Variable that are declared within the block are not visible outside the clock ({<block>})
+
+Constant Variable 
+*****************
+
+Constants are variables whoes value cannot be changed . Constants are used to reuse common value within a program to avoid rewriting them . 
+
+Eg : const constantVariable string = "this is a constant variable"
+
+"const" 		is the keyword 
+"constantVariable"	is the variable name 
+"string"		is the type 
+
+Defining Multiple Variables
+***************************
+
+Go provides a shorthand for declaring multi-line variable . 
+
+Eg:	var ( 
+		Variable1 = "developer" 
+		Variable2 = 99     
+		Variable3 = 22.7
+	)
+
+"var" is the keyword 
+"( )" values inside the parentheses are vaiable names and its values 
+
+
+============================================================
+		Control Structures
+============================================================
+	"GO has only FOR loop!!!!!! :)" 
+
+For loop / for statement 
+************************
+
+For allows us to repeat a set of statements within a block for specified number of times or when satisfying specific condition .
+The for loop can be used in different ways . 
+
+example code :
+*************
+
+package main
+
+import "fmt"
+
+func main() {
+	//FOR Loop Method-1
+	fmt.Println("### Method 1######")
+	index := 1
+	for index <= 10 {
+		fmt.Println(index)
+		index = index + 1
+	}
+	//FOR  loop Method-2
+	fmt.Println("\n### Method 2######")
+	for index := 10; index >= 0; index-- {
+		fmt.Println(index)
+	}
+	//FOR  loop Method-3
+	fmt.Println("\n### Method 3######")
+	for index, limit := 100, 90; index >= limit; index-- {
+		fmt.Println(index)
+	}
+
+}
+
+
+IF Condition
+************
+
+The IF statement executes or skips a sequence of statements (block), depending on the value of a Boolean expression(true or false).
+
+
+if/else statement structure :
+****************************
+
+if <condition>{
+   if the condition is true this block is executed
+}else{
+   if the condition is false this block is executed 
+}
+
+if/else if statement structure :
+******************************
+
+if <condition-1>{
+   if the condition-1 is true this block is executed and exits the block (<if/else if> block fully)
+}else if <condition-2> {
+   if the condition-2 is true this block is executed and exits the block (<if/else if> block fully)
+}else if <condition-3> {
+   if the condition-3 is true this block is executed and exits the block (<if/else if> block fully)
+}else if <condition-4>{
+   if the condition-4 is true this block is executed and exits the block (<if/else if> block fully)
+}
+
+
+example Code:
+************
+
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("\nif/else statement output\n")
+	//example for if/else statement
+	/*here we are checking if the number is odd or even .
+	Go works in top down method the loop is incremented as the condition is
+	satisfied */
+	for value, limit := 1, 25; value <= limit; value++ {
+		if value%2 == 0 {
+			fmt.Println(value, " is even")
+		} else {
+			fmt.Println(value, " is odd")
+		}
+	}
+
+	//example for  if/else if statement
+	/*here we are checking if the number is divisible by 10,5,7 in the same order
+	and we print the number in stdout .
+	Go works in top down method the loop is incremented as the condition is
+	satisfied */
+	fmt.Println("\nif/else if statement output\n")
+	for value, limit := 0, 100; value <= limit; value++ {
+		if value%10 == 0 {
+			fmt.Println(value, " is div by 10")
+		} else if value%5 == 0 {
+			fmt.Println(value, " is div by 5")
+		} else if value%7 == 0 {
+			fmt.Println(value, " is div by 7")
+		}
+	}
+
+}
+
+
+Switch Statement
+****************
+
+Switch statements are similar to "If" statement . The switch statement evaluates an expression and switches to the block that satisfies the condition .
+
+switch statement structure :
+****************************
+
+switch <expression>{
+	case <condition-1>:
+		<block to execute id the condition-1 is true>
+	case <condition-2>:
+		<block to execute id the condition-2 is true>
+	case <condition-3>:
+		<block to execute id the condition-3 is true>
+	default:
+		<This block is execured if none of the case condition is matched>
+}
+
+
+example Code:
+************
+
+package main
+
+import "fmt"
+
+func main() {
+
+	for val := 0; val <= 5; val++ {
+		switch val {
+		case 0:
+			fmt.Println("zero")
+		case 1:
+			fmt.Println("one")
+		case 4:
+			fmt.Println("four")
+		default:
+			fmt.Println("Not defined")
+
+		}
+	}
+}
+
+
+
+============================================================
+		Built in data-type
+============================================================
+
+
+
+
+ARRAY
+*****
+
+Array is a series of objects all of which are the same type.
+
+Declaring array :
+****************
+
+var array [5]int
+
+"var" 	 is the keyword
+"array"  is the name 
+[5]int	  this declares the length of the array-"5" and the type of the array "int"
+ 
+Shorthand declaration:
+**********************
+
+Type 1: array := [5]int{1,2,3,4,5}
+
+	"array"  	is the name 
+	[5]int   	"[5]" is the length of the array and "int" is the type 
+	{1,2,3,4,5}	the values to be assigned to the array 
+
+Type 2: array := [...]int{6,7,8,9,10,11}
+
+	"array"  	is the name 
+	[...]int   	"[...]" the length of the array with respect to numner of elements assigned to it and "int" is the type 
+	{1,2,3,4,5}	the values to be assigned to the array 
+
+
+Example code:
+*************
+
+package main
+
+import "fmt"
+
+func main() {
+
+	var arr [5]int // declaring a array of  length 5
+	arr[0] = 1
+	arr[1] = 2
+	arr[2] = 3
+	arr[3] = 4
+
+	fmt.Println(arr)
+
+	arr_2 := [3]int{6, 7, 8} //shorthand declaration of array methos - 1
+	fmt.Println(arr_2)
+
+	arr_3 := [...]int{9, 10, 11} //shorthand without mentioning the length ,method-2
+	fmt.Println(arr_3)
+}
+
+
+SLICE:
+******
+
+Slice is built on top of array and it provides more flexibitly to work with . The main advantage of slice is we "!!!need not!!!!" specify the 
+length of the slice array during declaration . 
+
+Declaring slice :
+*****************
+
+slice := []string{"I", "AM", "GO", "PROGRAMER"}
+
+	"slice"   			is the name 
+	[]string  			specifies the type of the slice
+ 	{"I", "AM", "GO", "PROGRAMER"}	the string values of the slice
+
+
+Declaring using make
+********************
+
+Built-in make function and its argument : make([]type, len, capicity)
+
+slice := make([]int, 5 ,10)
+
+	"slice" is the name 
+	"make"	Built-in function to make slice 
+	"[]int"	specifies the type of the slice
+ 	"5"	specifies the length of the slice
+	"10"	specifies the capacity of the slice
+
+Example code:
+*************
+
+package main
+
+import "fmt"
+
+func main() {
+	// Declaring a slice
+	slice1 := []string{"I", "AM", "GO", "PROGRAMER"}
+	//slice1[0] = "Go"
+	fmt.Println("Length of array : ", len(slice1))
+	fmt.Println("Capacity of array : ", cap(slice1))
+	fmt.Println("Array : ", slice1)
+
+	//Declaring  Slice using built-in make() function
+	slice2 := make([]int, 10, 15) // creates a slice with length of '10' and capacity of '15'
+	for index := 0; index < len(slice2); index++ {
+		slice2[index] = index
+	}
+	fmt.Println("Length of array : ", len(slice2))
+	fmt.Println("Capacity of array : ", cap(slice2))
+	fmt.Println("Array : ", slice2)
+}
+
+	
+MAP:
+****
+
+A map is an unordered collection of key-value pairs, where each key is unique.
+
+Declaring map :
+****************
+
+collection := make(map[int]string)
+	
+	"collection"  is the name 
+	"make"	      Built-in function to make map
+	"map"         is the keyword 
+	"[int]"	      type of the key
+	"string"      type of the value
+
+
+Example code:
+*************
+
+package main
+
+import "fmt"
+
+func main() {
+	collection := make(map[int]string)
+	collection[1] = "Go Developer"
+	collection[2] = "Python Developer"
+	collection[3] = "Tester"
+	fmt.Println(collection)
+
+}
