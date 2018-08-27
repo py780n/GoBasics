@@ -1,6 +1,12 @@
 
-NOTE: This page believes that readers will have basic knowledge of programing.
+NOTE: This page believes that readers will have basic knowledge of programing .
 
+Requirement:  
+============
+	1)  Go environment should be installed in your PC
+	2) 	"Hello World" Program is successfully run in your Go environment.
+	3)  You should know how to run , build and execute your code. 
+	
 Go is an open source programming language that makes it easy to build simple, reliable, and efficient software. 
 
 Content:
@@ -8,6 +14,9 @@ Content:
 2) Variable :  variables declaration, Shorthand declaration , Constant declaration, Multiple Variables
 3) Control Structures : for statement , if /else if statement , switch statement
 4) Built in data-type :  Array , slice , Map
+5) Functions :  Function , Variadic function , Defer , Panic and Recover
+6) Pointers :  Pointers and New 
+7) Structure : Structure , Method and interfaces
 
 
 ============================================================
@@ -89,7 +98,7 @@ Variable that are declared within the block are not visible outside the clock ({
 Constant Variable 
 *****************
 
-Constants are variables whoes value cannot be changed . Constants are used to reuse common value within a program to avoid rewriting them . 
+Constants are variables whose value cannot be changed . Constants are used to reuse common value within a program to avoid rewriting them . 
 
 Eg : const constantVariable string = "this is a constant variable"
 
@@ -272,8 +281,6 @@ func main() {
 ============================================================
 
 
-
-
 ARRAY
 *****
 
@@ -297,7 +304,7 @@ Type 1: array := [5]int{1,2,3,4,5}
 	[5]int   	"[5]" is the length of the array and "int" is the type 
 	{1,2,3,4,5}	the values to be assigned to the array 
 
-Type 2: array := [...]int{6,7,8,9,10,11}
+Type 2: array := [...]int{6,7,8,9,10,11,14}
 
 	"array"  	is the name 
 	[...]int   	"[...]" the length of the array with respect to numner of elements assigned to it and "int" is the type 
@@ -414,5 +421,444 @@ func main() {
 	collection[2] = "Python Developer"
 	collection[3] = "Tester"
 	fmt.Println(collection)
+
+}
+
+============================================================
+				Functions
+============================================================
+
+A function is an independent section of code that maps
+zero or more input parameters to zero or more output
+parameters.
+
+Declaring function :
+*******************
+
+func  <function_name>(name type ,name type)return type{
+	the code that you want the function to execute
+	}
+
+	"func"					is the keyword
+	"<function_name>"		where you specify the function name
+	"(name type ,name type)return type"  where you specify the input parameters and the return type ( called as "functions signature")
+
+Function Returning Multiple Values :
+***********************************
+
+func  <function_name>(name type ,name type)return (type , type ,..){
+	the code that you want the function to execute
+	}
+
+	"func"					is the keyword
+	"<function_name>"		where you specify the function name
+	"(name type ,name type)"  where you specify input parameters .
+	return (type , type ,..) where you specific output parameters
+
+
+Variadic function :
+*******************
+
+This type of function take zero or more arguments and has a special way of declaring . 
+
+Declaring :
+**********
+func  <function_name>(name ...type )return type{
+	the code that you want the function to execute
+	}
+
+	"func"					is the keyword
+	"<function_name>"		where you specify the function name
+	"(name ...type)"  		where you specify input parameters and type . The "..." say the go to expect zero or more arguments when called 
+	return type  			where you specific output type
+
+
+	
+Defer:
+******
+
+Go has a special statement called defer which schedules a function call after the end of other functions 
+
+Syntax:
+*******
+defer <function_name>
+	
+	"defer" 			is the keyword
+	"<function_name>"	is the function that you what defer to call
+
+Use case example : when we open a file we need to make sure to close it later. 
+
+sample code:
+************
+f, _ := os.Open(filename)
+defer f.Close()
+
+here "f.Close()" happens after all the other functions in your program is complete.
+
+Panic and Recover
+*****************
+
+A panic generally indicates a programmer error . We can handle the run-time panic with the built-in "recover" function.
+Recover stops the panic and returns the value that was passed to the call to panic. 
+
+
+Example code:
+*************
+
+package main
+
+import (
+	"fmt"
+	"sort"
+)
+
+//Returning single value function
+func topScore(dataList []float64) float64 {
+	sort.Float64s(dataList) //sort in-built function is used to sort the list
+	return dataList[len(dataList)-1]
+}
+
+//Returning Multiple Values funtion
+func average(dataList []float64) (float64, int) {
+	//This function calculates the average for the given list of numbers
+	total := 0.0
+	for _, value := range dataList {
+		total += value
+	}
+	return total / float64(len(dataList)), len(dataList) //Returning Multiple Values
+}
+
+//Variadic Functions
+func totalMarks(nums ...float64) int {
+	total := 0.0
+	for _, value := range nums {
+		total += value
+	}
+	return int(total)
+}
+
+//recursion function
+func factorial(value int) int {
+	if value == 0 {
+		return 1
+	}
+	return value * factorial(value-1)
+}
+
+//function created to use defer
+func endthepro() {
+	fmt.Println("the Program ends here")
+}
+
+// panic recover function
+func message() {
+	str := recover()
+	fmt.Println(str)
+}
+
+func main() {
+	defer endthepro()
+	defer message()
+
+	markList := []float64{98, 64, 75, 80}            //slice to hold the marks of the student
+	studentAverage, numberofsub := average(markList) // passing the mark list to the average and number of subjects .
+	studentTopscore := topScore(markList)            // passing the mark list to get the top score
+	totalscore := totalMarks(markList...)
+	fmt.Println("Top Socer :", studentTopscore)
+	fmt.Println("Student average :", studentAverage)
+	fmt.Println("Number of subjects :", numberofsub)
+	fmt.Println("Total Score :", totalscore)
+
+	//Closure :
+	X := 100
+	incremant := func() int {
+		X++
+		return X
+	}
+	increamentby10 := func(val int) int {
+		return val + 10
+	}
+	fmt.Println(increamentby10(X))
+	fmt.Println(incremant())
+
+	fmt.Println("Factorial :", factorial(10))
+	panic("this is panic message")
+
+}
+
+============================================================
+				Pointers and New
+============================================================
+
+Pointers reference a location in memory where a value is stored rather than the value itself . 
+
+
+Pointer Syntax:
+***************
+*<type>
+eg :  *int
+
+	"*"   	Pointers are referred
+	"int" 	The Type of memory that you what to point .
+
+&<viable name>
+eg : &value
+	
+	"&"  	is used to find the address of the variable
+	"value"	is the variable name 
+	
+
+NEW:
+****
+
+New is a inbuilt Go function that allocates enough memory for the type mentioned and returns a pointer to it . 
+
+New Syntax:
+***********
+
+name := new(type)
+
+	"new"	is the in-built function
+	"type"	specify the type  
+	
+Example code:
+*************
+
+package main
+
+import "fmt"
+
+//function that handles pointer
+func makeValuezero(val *int) {
+	*val = 0 //"*" here is used to dereference to assigne new value
+}
+func make999(val *int) {
+	*val = 999
+}
+
+func main() {
+	currentValue := 99
+	fmt.Println("Initial  Value: ", currentValue)
+	fmt.Println("address of the Initial value :", &currentValue)
+	makeValuezero(&currentValue) //"&currentValue" is the adderess that is passed to the funtion
+	fmt.Println("New Value: ", currentValue)
+	fmt.Println("address of the New value :", &currentValue)
+
+	usingNewfunc := new(int)
+	make999(usingNewfunc)
+	fmt.Println(*usingNewfunc)
+
+}
+	
+============================================================
+				Structure , Method and interfaces
+============================================================
+Structure:
+**********
+
+Structure is another user-defined data type available in Go programming, which allows you to combine data items of different kinds
+
+Structure Syntax:	
+*****************
+
+type <name> struct {
+	variableName1 Type
+	variableName2 Type
+	variableName3 Type
+	
+}
+	
+	"type" 					is the keyword
+	"<name>"					name of the structure
+	"struct" 				is the keyword
+	"{ variableNme type}" 	where you declare the variable name and its type
+
+eg :
+
+type userinfo struct {
+	userName string
+	Userid   int
+	userMail string
+}
+
+
+Methods:
+********
+
+In Go, a method is a function that is declared with a receiver. A receiver is a value or a pointer of a named or struct type. 
+All the methods for a given type belong to the type’s method set
+
+
+Method syntax
+*************
+func (<name> type) <function_name> () return type {
+	body for the function 
+}
+
+A method can only be associated with one struct type. 
+
+
+Embedded Type:
+**************
+Struct types have the ability to contain anonymous or embedded fields. This is also called embedding a type. 
+When we embed a type into a struct, the name of the type acts as the field name for what is then an embedded field.
+
+Embedded syntax:
+***************
+
+type <name> struct {
+	<NAME of any other Struct defined>
+	<name> type
+	}
+
+	"type" 									is the keyword
+	"<name>"								name of the structure
+	"struct" 								is the keyword
+	"<NAME of any other Struct defined>"	embedded already existing struct  
+	"<name> type" 	 						where you declare other the variable name and its type
+
+
+Example Code:
+*************
+
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+type userinfo struct {
+	userName string
+	Userid   int
+	userMail string
+}
+
+type cylinder struct {
+	hight  float64
+	radius float64
+}
+
+//"Embeded strucuture"
+type CodingSkill struct {
+	userinfo
+	cancode bool
+	lang    string
+}
+
+//method
+func (cylindertype *cylinder) area() float64 {
+	return (2 * math.Pi * cylindertype.radius * cylindertype.hight) + (2 * math.Pi * cylindertype.radius * cylindertype.radius)
+
+}
+
+func addMailid(detail *CodingSkill) {
+	detail.userMail = detail.userName + "@golang.com"
+}
+
+func main() {
+	empdetail := new(userinfo)
+	empdetail.userName = "Josh"
+	empdetail.Userid = 99
+	empdetail.userMail = "Josh@golang.com"
+
+	fmt.Println(*empdetail)
+
+	cyl1 := cylinder{10, 5}
+	fmt.Println("Area of cylinder :", cyl1.area()) //  used the "Method" type funciton
+
+	//using embeded type struct
+	programer := new(CodingSkill)
+	programer.userName = "john"
+	programer.Userid = 100
+	addMailid(programer)
+	programer.cancode = true
+	programer.lang = "GO"
+
+	fmt.Println(*programer)
+
+}
+	
+Interfaces:
+***********
+
+Interfaces allows a value to be more that one type (Polymorphism) . 
+
+Interface syntax:
+******************
+
+type <name> interface {
+	Method1 ()
+	Method2 ()
+	.
+	.
+	}
+
+	"type" 									is the keyword
+	"<name>"								name of the structure
+	"interface" 							is the keyword
+	"method()"								methods that you want to associate 
+	
+
+Example Code :
+*************
+
+package main
+
+import "fmt"
+
+type user struct {
+	name string
+	id   int
+}
+
+type programingskill struct {
+	user
+	language string
+	points   int
+}
+
+type Notaprogramer struct {
+	user
+	skillset string
+}
+
+func (skill programingskill) asigntask() {
+	fmt.Println("Programner name: ", skill.name)
+	fmt.Println("Language : ", skill.language)
+
+}
+
+func (skill Notaprogramer) asigntask() {
+	fmt.Println("Not a programer")
+	fmt.Println("Skill set : ", skill.skillset)
+
+}
+
+type toassign interface {
+	asigntask()
+}
+
+func usertype(info toassign) {
+	info.asigntask()
+}
+
+func main() {
+	emp1 := new(programingskill)
+	emp1.name = "John"
+	emp1.id = 99
+	emp1.language = "Golang"
+	emp1.points = 07
+
+	emp2 := new(Notaprogramer)
+	emp2.name = "Tim"
+	emp2.id = 99
+	emp2.skillset = "Linux"
+
+	//passing Struct type "programingskill" to the interface function
+	usertype(emp1)
+
+	//passing Struct type "Notaprogramer" to the interface function
+	usertype(emp2)
 
 }
