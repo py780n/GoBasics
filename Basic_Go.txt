@@ -17,6 +17,7 @@ Content:
 5) Functions :  Function , Variadic function , Defer , Panic and Recover
 6) Pointers :  Pointers and New 
 7) Structure : Structure , Method and interfaces
+8) Concurrency : Goroutines , Channels ,Channel Direction  , Select Statement
 
 
 ============================================================
@@ -339,7 +340,7 @@ func main() {
 SLICE:
 ******
 
-Slice is built on top of array and it provides more flexibitly to work with . The main advantage of slice is we "!!!need not!!!!" specify the 
+Slice is built on top of array and it provides more flexibility to work with . The main advantage of slice is we "!!!need not!!!!" specify the 
 length of the slice array during declaration . 
 
 Declaring slice :
@@ -860,5 +861,192 @@ func main() {
 
 	//passing Struct type "Notaprogramer" to the interface function
 	usertype(emp2)
+
+}
+
+
+============================================================
+				Concurrency
+============================================================
+
+Concurrency is the ability of an program to run more than one task at a time. 
+i.e many independent jobs doing different things at once. 
+
+Note : Very basics of concurrency is shared here and this will help you to just get started in GO. 
+
+
+
+Goroutines:
+***********
+
+Goroutines are functions or methods that run concurrently with other functions or methods . 
+
+
+Goroutine syntax:
+*****************
+
+go <function or method>()
+
+		"go"						is the keyword
+		"<function or method>"		specify the method or a function that you what to run concurrently
+
+
+Channels :
+*********
+
+Channels are the pipes that connect concurrent goroutines. 
+You can send values into channels from one goroutine and receive those values into another goroutine. 
+
+Channel Syntax:
+***************
+<name> := make(chan <type>)
+
+		"<name>"    name of the channel 
+		":=" 		making a shorthand declaration 
+		"make()"	inbuilt function used to create a channel 
+		"chan"		keyword word used 
+		"<type>"		type of channel that you what to create.
+
+example :
+
+	channelOne = make(chan string)   This  create a channel name "channelOne" of type "string"
+
+Channel Direction 
+*****************
+
+We can restrict the channels to send or receive data by specifying the direction .
+"<-" operator specifies the direction of the channel . 
+
+Assigning data to the channel and sending  (writing data on the channel):
+************************************************************************
+
+<name>  chan <- <type>
+
+	"<name>"    name of the channel
+	"chan"		keyword word used	
+	"<-"		Direction that specifies write data on the channel
+	"<type>"	type of data 
+
+example:	
+*******
+	channelOne chan <- string  : here you can assign value to "channelOne" of type "string"
+
+Here we can assign a value to "channelOne" and send it to another goroutine
+
+
+Receiving data from the channel and using (reading data on the channel):
+************************************************************************
+
+<name> <- chan <type>
+
+	"<name>"    name of the channel
+	"<-"		Direction that specifies receive data from the channel
+	"chan"		keyword word used	
+	"<type>"	type of data 
+
+example:	
+*******
+	channelOne <-chan string  : here you can read value from "channelOne" of type "string"
+
+We can receive value for from another goroutine and use it . 
+
+
+example code:
+*************
+
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	ch := make(chan int)
+	go func(chn <-chan int) {
+		i := <-chn
+		fmt.Println(i)
+	}(ch)
+	go func(chn chan<- int) {
+		chn <- 44
+	}(ch)
+	fmt.Scanln()	//"scanln" is used to make the main wait without exiting .
+ 	fmt.Println("DONE")
+}
+
+
+
+Select Statement :
+*****************
+
+Select is a special statement in go to handle channels .  It can be used to handle channels in a function. 
+
+
+Select syntax:
+**************
+
+select {
+	case <name> := <-channelOne : 
+		<Block to do something>
+	case <name> := <-channelTwo:
+		<Block to do something>
+	case <name> := <-channelThree:
+		<Block to do something>
+	default :
+		<Do something if there is no channel received>
+}
+
+
+example Code:
+*************
+
+
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+var wtg = sync.WaitGroup{} 
+
+var donCh = make(chan struct{}) 
+
+func main() {
+	ch1 := make(chan int)
+	ch2 := make(chan int)
+
+	wtg.Add(2)
+	go func(ch1 chan<- int) {
+		for i := 0; i <= 10; i++ {
+			ch1 <- i
+		}
+		wtg.Done()
+	}(ch1)
+
+	go func(ch2 chan<- int) {
+		for j := 11; j <= 20; j++ {
+			ch2 <- j
+		}
+		wtg.Done()
+	}(ch2)
+	//wtg.Wait()
+
+	go findRange(ch1, ch2)
+	donCh <- struct{}{}
+	wtg.Wait()
+}
+
+//function using select statement 
+func findRange(chl1 <-chan int, chl2 <-chan int) {
+	for {
+		select {
+		case entry1 := <-chl1:
+			fmt.Println("The number between 0 to 10 :", entry1)
+		case entry2 := <-chl2:
+			fmt.Println("Then number between 11 to 20 :", entry2)
+		case <-donCh:
+			break
+		}
+	}
 
 }
